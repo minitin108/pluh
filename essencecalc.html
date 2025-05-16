@@ -1,25 +1,50 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
- <head>
-  <title>the essence calculator</title>
+<head>
+  <meta charset="UTF-8">
+  <title>Multiply by 4 - 5 Increments</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+    }
+    #results {
+      margin-top: 20px;
+    }
+    .result-item {
+      margin: 5px 0;
+    }
+  </style>
 </head>
-
 <body>
 
-<form>
-  <label for="infer">Inferium Amount:</label>
-  <input type="text" id="infer" name="infer"><br><br>
-</form>
+  <h2>Multiply by 4 - 5 Increments</h2>
+  <label for="userNumber">Enter a number:</label>
+  <input type="number" id="userNumber">
+  <button onclick="multiplyByFour()">Calculate</button>
 
-<script type="text/javascript">
- var prud = id="infer" * 4;
-</script>
+  <div id="results"></div>
 
-<script type="text/javascript">
- document.write(prud)
-</script>
-<p id=prud ></p>
+  <script>
+    function multiplyByFour() {
+      const number = parseFloat(document.getElementById('userNumber').value);
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+
+      if (isNaN(number)) {
+        resultsDiv.innerHTML = '<p>Please enter a valid number.</p>';
+        return;
+      }
+
+      for (let i = 1; i <= 5; i++) {
+        const result = number * 4 * i;
+        const p = document.createElement('p');
+        p.className = 'result-item';
+        p.textContent = `Increment ${i}: ${number} × 4 × ${i} = ${result}`;
+        resultsDiv.appendChild(p);
+      }
+    }
+  </script>
 
 </body>
 </html>
