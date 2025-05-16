@@ -2,49 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>the essence calculator</title>
+  <title>Multiply by 4 - 6 Steps</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 30px;
+      padding: 20px;
     }
-    #results {
-      margin-top: 20px;
-    }
-    .result-item {
-      margin: 5px 0;
+    input {
+      margin: 10px;
+      padding: 5px;
+      width: 120px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
-
-  <h2>the essence calculator</h2>
-  <label for="userNumber">Enter the amount of insanium:</label>
-  <input type="number" id="userNumber">
-  <button onclick="multiplyByFour()">Calculate</button>
-
-  <div id="results"></div>
+  <h2>Multiply by 4 (6 steps)</h2>
+  <div>
+    <label>Step 1: <input type="number" id="input0" oninput="updateFrom(0)"></label><br>
+    <label>Step 2: <input type="number" id="input1" oninput="updateFrom(1)"></label><br>
+    <label>Step 3: <input type="number" id="input2" oninput="updateFrom(2)"></label><br>
+    <label>Step 4: <input type="number" id="input3" oninput="updateFrom(3)"></label><br>
+    <label>Step 5: <input type="number" id="input4" oninput="updateFrom(4)"></label><br>
+    <label>Step 6: <input type="number" id="input5" oninput="updateFrom(5)"></label><br>
+  </div>
 
   <script>
-    function multiplyByFour() {
-      const number = parseFloat(document.getElementById('userNumber').value);
-      const resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = '';
+    const multiplier = 4;
+    const inputs = Array.from({ length: 6 }, (_, i) => document.getElementById(`input${i}`));
+    let suppressUpdate = false;
 
-      if (isNaN(number)) {
-        resultsDiv.innerHTML = '<p>Please enter a valid number.</p>';
-        return;
+    function updateFrom(index) {
+      if (suppressUpdate) return;
+
+      const value = parseFloat(inputs[index].value);
+      if (isNaN(value)) return;
+
+      suppressUpdate = true;
+
+      // Update values before the index
+      let temp = value;
+      for (let i = index - 1; i >= 0; i--) {
+        temp = temp / multiplier;
+        inputs[i].value = temp.toFixed(2);
       }
 
-      for (let i = 1; i <= 5; i++) {
-        const result = number * 4 * i;
-        const p = document.createElement('p');
-        p.className = 'result-item';
-        p.textContent = `Increment ${i}: ${number} × 4 × ${i} = ${result}`;
-        resultsDiv.appendChild(p);
+      // Update values after the index
+      temp = value;
+      for (let i = index + 1; i < inputs.length; i++) {
+        temp = temp * multiplier;
+        inputs[i].value = temp.toFixed(2);
       }
+
+      suppressUpdate = false;
     }
   </script>
-
 </body>
 </html>
