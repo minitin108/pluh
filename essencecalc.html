@@ -8,35 +8,70 @@
       font-family: Arial, sans-serif;
       padding: 20px;
     }
+    .row {
+      margin-bottom: 10px;
+    }
     input {
-      margin: 10px;
       padding: 5px;
       width: 120px;
       font-size: 16px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
   <h2>Essence Calculator</h2>
-  <div>
-    <label>Insanium: <input type="number" id="input0" oninput="updateFrom(0)"></label><br>
-    <label>Superium: <input type="number" id="input1" oninput="updateFrom(1)"></label><br>
-    <label>Imperium: <input type="number" id="input2" oninput="updateFrom(2)"></label><br>
-    <label>Tertium: <input type="number" id="input3" oninput="updateFrom(3)"></label><br>
-    <label>Prudentium: <input type="number" id="input4" oninput="updateFrom(4)"></label><br>
-    <label>Inferium: <input type="number" id="input5" oninput="updateFrom(5)"></label><br>
+  <div id="calculator">
+    <div class="row">
+      <label>Insanium: <input type="number" id="input0" oninput="updateFrom(0)"></label>
+      <span>Stack Amount: <input type="number" id="stack0" oninput="updateFromStack(0)"></span>
+    </div>
+    <div class="row">
+      <label>Superium: <input type="number" id="input1" oninput="updateFrom(1)"></label>
+      <span>Stack Amount: <input type="number" id="stack1" oninput="updateFromStack(1)"></span>
+    </div>
+    <div class="row">
+      <label>Imperium: <input type="number" id="input2" oninput="updateFrom(2)"></label>
+      <span>Stack Amount: <input type="number" id="stack2" oninput="updateFromStack(2)"></span>
+    </div>
+    <div class="row">
+      <label>Tertium: <input type="number" id="input3" oninput="updateFrom(3)"></label>
+      <span>Stack Amount: <input type="number" id="stack3" oninput="updateFromStack(3)"></span>
+    </div>
+    <div class="row">
+      <label>Prudentium: <input type="number" id="input4" oninput="updateFrom(4)"></label>
+      <span>Stack Amount: <input type="number" id="stack4" oninput="updateFromStack(4)"></span>
+    </div>
+    <div class="row">
+      <label>Inferium: <input type="number" id="input5" oninput="updateFrom(5)"></label>
+      <span>Stack Amount: <input type="number" id="stack5" oninput="updateFromStack(5)"></span>
+    </div>
   </div>
+
+  <!-- ✅ Clear All Button -->
+  <button onclick="clearAll()">Clear All</button>
 
   <script>
     const multiplier = 4;
+    const stackDivider = 64;
     const inputs = Array.from({ length: 6 }, (_, i) => document.getElementById(`input${i}`));
+    const stacks = Array.from({ length: 6 }, (_, i) => document.getElementById(`stack${i}`));
     let suppressUpdate = false;
 
     function updateFrom(index) {
       if (suppressUpdate) return;
 
       const value = parseFloat(inputs[index].value);
-      if (isNaN(value)) return;
+      if (isNaN(value) || inputs[index].value.trim() === "") {
+        clearAll();
+        return;
+      }
 
       suppressUpdate = true;
 
@@ -44,16 +79,45 @@
       let temp = value;
       for (let i = index - 1; i >= 0; i--) {
         temp = temp / multiplier;
-        inputs[i].value = temp.toFixed(2);
+        inputs[i].value = parseFloat(temp.toFixed(2)).toString();
       }
 
       // Update values after the index
       temp = value;
       for (let i = index + 1; i < inputs.length; i++) {
         temp = temp * multiplier;
-        inputs[i].value = temp.toFixed(2);
+        inputs[i].value = parseFloat(temp.toFixed(2)).toString();
       }
 
+      updateStacks();
+      suppressUpdate = false;
+    }
+
+    function updateFromStack(index) {
+      if (suppressUpdate) return;
+
+      const stackVal = parseFloat(stacks[index].value);
+      if (isNaN(stackVal) || stacks[index].value.trim() === "") {
+        clearAll();
+        return;
+      }
+
+      const essenceVal = stackVal * stackDivider;
+      inputs[index].value = essenceVal.toFixed(2);
+      updateFrom(index);
+    }
+
+    function updateStacks() {
+      inputs.forEach((input, i) => {
+        const num = parseFloat(input.value);
+        stacks[i].value = isNaN(num) ? '' : (num / stackDivider).toFixed(2);
+      });
+    }
+
+    function clearAll() {
+      suppressUpdate = true;
+      inputs.forEach(input => input.value = '');
+      stacks.forEach(stack => stack.value = '');
       suppressUpdate = false;
     }
   </script>
