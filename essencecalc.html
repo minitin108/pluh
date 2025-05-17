@@ -8,53 +8,106 @@
       font-family: Arial, sans-serif;
       padding: 20px;
     }
-    .row {
+
+    .calculator {
+      display: grid;
+      grid-template-columns: 150px 150px 150px 150px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .calculator-header {
+      font-weight: bold;
       margin-bottom: 10px;
     }
+
+    .row {
+      display: contents;
+    }
+
     input {
       padding: 5px;
-      width: 120px;
+      width: 130px;
       font-size: 16px;
-      margin-right: 10px;
     }
+
     button {
+      margin-top: 20px;
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
-      margin-top: 20px;
+    }
+
+    /* Color-coded row backgrounds */
+    .insanium    { background-color: #a64ca6; } /* Purple */
+    .superium    { background-color: #e74c3c; } /* Red */
+    .imperium    { background-color: #3498db; } /* Blue */
+    .tertium     { background-color: #f39c12; } /* Orange */
+    .prudentium  { background-color: #145a32; color: white; } /* Dark Green */
+    .inferium    { background-color: #58d68d; } /* Light Green */
+
+    .tier-row > * {
+      padding: 5px;
     }
   </style>
 </head>
 <body>
   <h2>Essence Calculator</h2>
-  <div id="calculator">
-    <div class="row">
-      <label>Insanium: <input type="number" id="input0" oninput="updateFrom(0)"></label>
-      <span>Stack Amount: <input type="number" id="stack0" oninput="updateFromStack(0)"></span>
+
+  <!-- Grid Headers -->
+  <div class="calculator calculator-header">
+    <div>Essence Tier</div>
+    <div>Essence Amount</div>
+    <div>Stack Amount</div>
+    <div></div>
+  </div>
+
+  <!-- Calculator Grid -->
+  <div class="calculator">
+    <div class="tier-row insanium row">
+      <div>Insanium:</div>
+      <input type="number" id="input0" oninput="updateFrom(0)">
+      <input type="number" id="stack0" oninput="updateFromStack(0)">
+      <div></div>
     </div>
-    <div class="row">
-      <label>Superium: <input type="number" id="input1" oninput="updateFrom(1)"></label>
-      <span>Stack Amount: <input type="number" id="stack1" oninput="updateFromStack(1)"></span>
+
+    <div class="tier-row superium row">
+      <div>Superium:</div>
+      <input type="number" id="input1" oninput="updateFrom(1)">
+      <input type="number" id="stack1" oninput="updateFromStack(1)">
+      <div></div>
     </div>
-    <div class="row">
-      <label>Imperium: <input type="number" id="input2" oninput="updateFrom(2)"></label>
-      <span>Stack Amount: <input type="number" id="stack2" oninput="updateFromStack(2)"></span>
+
+    <div class="tier-row imperium row">
+      <div>Imperium:</div>
+      <input type="number" id="input2" oninput="updateFrom(2)">
+      <input type="number" id="stack2" oninput="updateFromStack(2)">
+      <div></div>
     </div>
-    <div class="row">
-      <label>Tertium: <input type="number" id="input3" oninput="updateFrom(3)"></label>
-      <span>Stack Amount: <input type="number" id="stack3" oninput="updateFromStack(3)"></span>
+
+    <div class="tier-row tertium row">
+      <div>Tertium:</div>
+      <input type="number" id="input3" oninput="updateFrom(3)">
+      <input type="number" id="stack3" oninput="updateFromStack(3)">
+      <div></div>
     </div>
-    <div class="row">
-      <label>Prudentium: <input type="number" id="input4" oninput="updateFrom(4)"></label>
-      <span>Stack Amount: <input type="number" id="stack4" oninput="updateFromStack(4)"></span>
+
+    <div class="tier-row prudentium row">
+      <div>Prudentium:</div>
+      <input type="number" id="input4" oninput="updateFrom(4)">
+      <input type="number" id="stack4" oninput="updateFromStack(4)">
+      <div></div>
     </div>
-    <div class="row">
-      <label>Inferium: <input type="number" id="input5" oninput="updateFrom(5)"></label>
-      <span>Stack Amount: <input type="number" id="stack5" oninput="updateFromStack(5)"></span>
+
+    <div class="tier-row inferium row">
+      <div>Inferium:</div>
+      <input type="number" id="input5" oninput="updateFrom(5)">
+      <input type="number" id="stack5" oninput="updateFromStack(5)">
+      <div></div>
     </div>
   </div>
 
-  <!-- ✅ Clear All Button -->
+  <!-- Clear All Button -->
   <button onclick="clearAll()">Clear All</button>
 
   <script>
@@ -75,14 +128,12 @@
 
       suppressUpdate = true;
 
-      // Update values before the index
       let temp = value;
       for (let i = index - 1; i >= 0; i--) {
         temp = temp / multiplier;
         inputs[i].value = parseFloat(temp.toFixed(2)).toString();
       }
 
-      // Update values after the index
       temp = value;
       for (let i = index + 1; i < inputs.length; i++) {
         temp = temp * multiplier;
